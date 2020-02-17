@@ -1,0 +1,28 @@
+{
+  "name": "artoolkit5-js",
+  "version": "0.0.1",
+  "description": "ES6 module port of artoolkit5",
+  "main": "dist/ARToolkit.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "build-lib": "node ./scripts/makem.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andypotato/artoolkit5-js.git"
+  },
+  "author": "Andreas Schallwig",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/andypotato/artoolkit5-js/issues"
+  },
+  "homepage": "https://github.com/andypotato/artoolkit5-js#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@open-wc/webpack-import-meta-loader": "^0.4.3",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
+  }
+}

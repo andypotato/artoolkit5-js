@@ -1,0 +1,3 @@
+[submodule "lib/artoolkit5"]
+	path = lib/artoolkit5
+	url = https://github.com/artoolkitx/artoolkit5
