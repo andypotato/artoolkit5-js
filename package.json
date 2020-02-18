@@ -18,6 +18,13 @@
     "url": "https://github.com/andypotato/artoolkit5-js/issues"
   },
   "homepage": "https://github.com/andypotato/artoolkit5-js#readme",
+  "keywords": [
+    "AR",
+    "Augmented Reality",
+    "ARToolkit5",
+    "ARToolkitX",
+    "Emscripten"
+  ],
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
