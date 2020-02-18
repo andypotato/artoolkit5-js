@@ -34,9 +34,5 @@ module.exports = {
   // @see https://stackoverflow.com/questions/59487224/webpack-throws-error-with-emscripten-cant-resolve-fs
   node: {
     'fs': 'empty'
-  },
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: false,
   }
 };

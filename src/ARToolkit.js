@@ -1,28 +1,17 @@
-import Module from './artoolkit5/artoolkit.debug.js';
+import Module from './artoolkit5/artoolkit_wasm.js';
 
-export default class ARToolkit {
-
-  // construction
-  constructor() {
-
-    // reference the library
-    this.instance;
-  }
-  //----------------------------------------------------------------------------
-
-  // module initialization
-  init() {
-
-    let $clazz = this;
-
+const ModuleLoader = {
+  init: () => {
     return new Promise(resolve => {
       Module({
         onRuntimeInitialized() {
-          $clazz.instance = this;
-          resolve();
+          // need to wrap this in an object
+          // otherwise it will cause Chrome to crash
+          resolve({ instance: this });
         }
       });
     });
   }
-  //----------------------------------------------------------------------------
-}
+};
+
+export default ModuleLoader

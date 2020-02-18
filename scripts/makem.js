@@ -158,18 +158,18 @@ FLAGS += ' -s USE_ZLIB=1';
 FLAGS += ' -s USE_LIBJPEG';
 FLAGS += ' --memory-init-file 0 '; // for memless file
 
-var WASM_FLAGS = ' -s BINARYEN_TRAP_MODE=clamp'
+var WASM_FLAGS = ' -s BINARYEN_TRAP_MODE=clamp -s SINGLE_FILE=1 ';
 
 FLAGS += ' --bind ';
 
-var MODULARIZE_FLAGS = ' -s EXPORT_ES6=1 -s MODULARIZE=1 '
+var MODULARIZE_FLAGS = ' -s EXPORT_ES6=1 -s MODULARIZE=1 ';
 
 /* DEBUG FLAGS */
 var DEBUG_FLAGS = ' -g ';
 DEBUG_FLAGS += ' -s ASSERTIONS=1 '
 DEBUG_FLAGS += ' --profiling '
 DEBUG_FLAGS += ' -s ALLOW_MEMORY_GROWTH=1';
-DEBUG_FLAGS += '  -s DEMANGLE_SUPPORT=1 ';
+DEBUG_FLAGS += ' -s DEMANGLE_SUPPORT=1 ';
 
 var INCLUDES = [
   path.resolve(__dirname, ARTOOLKIT5_ROOT + '/include'),

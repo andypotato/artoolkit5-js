@@ -4,6 +4,7 @@
   "description": "ES6 module port of artoolkit5",
   "main": "dist/ARToolkit.js",
   "scripts": {
+    "dev": "webpack --mode development --progress --colors --watch",
     "build": "webpack --mode production",
     "build-lib": "node ./scripts/makem.js"
   },
