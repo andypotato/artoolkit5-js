@@ -10,6 +10,7 @@ module.exports = {
     //umdNamedDefine: true,
     // @see: https://github.com/webpack/webpack/issues/3929
     libraryExport: 'default',
+    globalObject: 'typeof self !== \'undefined\' ? self : this',
   },
   module: {
     rules: [
@@ -21,9 +22,6 @@ module.exports = {
           options: {
             presets: ['@babel/preset-env']
           }
-        }, {
-          // @see https://github.com/emscripten-core/emscripten/issues/8729
-          loader: require.resolve('@open-wc/webpack-import-meta-loader')
         }]
       },
     ],

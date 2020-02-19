@@ -1,6 +1,6 @@
 {
   "name": "artoolkit5-js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ES6 module port of artoolkit5",
   "main": "dist/ARToolkit.js",
   "scripts": {
@@ -28,7 +28,6 @@
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
-    "@open-wc/webpack-import-meta-loader": "^0.4.3",
     "babel-loader": "^8.0.6",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11"
