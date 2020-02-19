@@ -156,6 +156,8 @@ FLAGS += ' -Wno-warn-absolute-paths ';
 FLAGS += ' -s TOTAL_MEMORY=' + MEM + ' ';
 FLAGS += ' -s USE_ZLIB=1';
 FLAGS += ' -s USE_LIBJPEG';
+// @see https://github.com/emscripten-core/emscripten/issues/6061
+FLAGS += ' -s "EXTRA_EXPORTED_RUNTIME_METHODS=[\'FS\']"';
 FLAGS += ' --memory-init-file 0 '; // for memless file
 
 var WASM_FLAGS = ' -s BINARYEN_TRAP_MODE=clamp -s SINGLE_FILE=1 ';
