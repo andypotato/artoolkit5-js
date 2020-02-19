@@ -7,9 +7,9 @@ module.exports = {
     filename: 'ARToolkit.js',
     library: 'ARToolkit',
     libraryTarget: 'umd',
-    //umdNamedDefine: true,
     // @see: https://github.com/webpack/webpack/issues/3929
     libraryExport: 'default',
+    // @see: https://github.com/webpack/webpack/issues/6522
     globalObject: 'typeof self !== \'undefined\' ? self : this',
   },
   module: {
@@ -20,7 +20,11 @@ module.exports = {
         use: [{
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: ['@babel/preset-env'],
+            plugins: [
+              // @see https://github.com/babel/babel/issues/9849
+              ["@babel/transform-runtime"]
+            ]
           }
         }]
       },

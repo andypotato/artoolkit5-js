@@ -27,12 +27,32 @@ const ARToolkit = require('artoolkit5-js');
 import ARToolkit from 'artoolkit5-js';
 ```
 
-After successfully importing the module in your environment you can create an instance of the runtime using the `init` method:
+After successfully importing the module you need to initialize it using the
+`init()` method:
+
 ```
-ARToolkit.init().then(runtime => {
-  // runtime.instance is now a reference to the artoolkitx library
-  // for documentation and usage examples see
-  // https://github.com/artoolkitx/artoolkit5
-  console.log(runtime.instance);
+const artoolkit = new ARToolkit();
+artoolkit.init()
+.then(_ => {
+  return artoolkit.loadCamera('/data/camera_para.dat');
+})
+.then(cameraId => {
+  console.log('Got camera ID', cameraId);
+})
+.catch(err => {
+  console.log('Something went wrong', err);
 });
 ```
+
+You can access all public ARToolkit methods and class constants like this:
+```
+  // for the full API documentation see
+  // https://github.com/artoolkitx/artoolkit5
+  artoolkit.detectMarker( ... );
+
+  console.log(artoolkit.AR_LOG_LEVEL_DEBUG);
+```
+
+
+  
+
