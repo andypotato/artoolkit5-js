@@ -31,6 +31,7 @@ export default class ARToolkit {
     const runtime = await ModuleLoader.init();
     this.instance = runtime.instance;
     this._decorate();
+    return this;
   }
 
   _decorate() {
@@ -73,21 +74,32 @@ export default class ARToolkit {
   //----------------------------------------------------------------------------
 
   // public accessors
-  loadCamera(url) {
+  loadCamera(urlOrData) {
 
     // Note: Not supporting STRING or OBJECT type camera parameters (yet)
     const target = '/camera_param_' + this.cameraCount++;
 
     return new Promise((resolve, reject) => {
-      this._fetchIntoFile(url, target, true)
-        .then(data => {
-          const cameraId = this.instance._loadCamera(target);
-          resolve(cameraId);
-        })
-        .catch(error => {
-          reject(error);
-        });
+
+      new Promise((resolve, reject) => {
+        if(urlOrData instanceof Uint8Array) {
+          resolve(urlOrData);
+        } else {
+          this._fetchRemoteData(urlOrData, true)
+          .then(data => resolve(data))
+          .catch(error => reject(error));
+        }
+      })
+      .then(data => {
+        this._storeDataFile(data, target);
+        resolve(this.instance._loadCamera(target));
+      })
+      .catch(error => {
+        reject(error);
+      });
+
     });
+
   }
 
   addMarker() {
@@ -105,32 +117,32 @@ export default class ARToolkit {
 
   // implementation
 
-  // Examples:
-  // _fetchIntoFile('/data/hiro.patt', '/data/marker_0');
-  // _fetchIntoFile('/data/camera_para.dat', '/camera_0', true);
-  _fetchIntoFile(url, target, asBinary=false) {
+  _fetchRemoteData(url, asBinary=false) {
     return new Promise((resolve, reject) => {
-      let requestOptions = {};
-      if(asBinary) {
-        requestOptions['responseType'] = 'arraybuffer';
-      }
+      const requestOptions = asBinary ?
+        { responseType: 'arraybuffer' } : {};
       axios.get(url, requestOptions)
         .then(response => {
-          // FS is provided by emscripten
-          // Note: strings will always be written as UTF-8
-          if(asBinary) {
-            this.instance.FS.writeFile(target, new Uint8Array(response.data), {
-              encoding: 'binary'
-            });
-          } else {
-            this.instance.FS.writeFile(target, response.data);
-          }
-          resolve(response.data);
+          const data = asBinary ? new Uint8Array(response.data) : response.data;
+          resolve(data);
         })
         .catch(error => {
           reject(error);
         })
     });
+  }
+
+  _storeDataFile(data, target) {
+    // FS is provided by emscripten
+    // Note: strings will always be written as UTF-8
+    // Note2: binary data must be encoded as Uint8Array
+    if(data instanceof Uint8Array) {
+      this.instance.FS.writeFile(target, data, {
+        encoding: 'binary'
+      });
+    } else {
+      this.instance.FS.writeFile(target, data);
+    }
   }
   //----------------------------------------------------------------------------
 }
