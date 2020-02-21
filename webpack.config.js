@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/ARToolkit.js',
+  entry: './src/index.js',
   output: {
     path: path.resolve('dist'),
     filename: 'ARToolkit.js',

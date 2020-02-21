@@ -1,6 +1,5 @@
 import ModuleLoader from './ModuleLoader';
-import axios from 'axios';
-
+import Utils from './Utils';
 
 const UNKNOWN_MARKER = -1;
 const PATTERN_MARKER = 0;
@@ -17,7 +16,7 @@ export default class ARToolkit {
   // construction
   constructor() {
 
-    // reference to WASM runtime
+    // reference to WASM module
     this.instance;
 
     this.markerCount = 0;
@@ -28,9 +27,17 @@ export default class ARToolkit {
 
   // initialization
   async init() {
+
     const runtime = await ModuleLoader.init();
     this.instance = runtime.instance;
     this._decorate();
+
+    // we're committing a cardinal sin here by exporting the instance into
+    // the global namespace. all blame goes to the person who created that CPP
+    // wrapper ARToolKitJS.cpp and introduced a global "artoolkit" variable.
+    let scope = (typeof window !== 'undefined') ? window : global;
+    scope['artoolkit'] = this;
+
     return this;
   }
 
@@ -74,36 +81,46 @@ export default class ARToolkit {
   //----------------------------------------------------------------------------
 
   // public accessors
-  loadCamera(urlOrData) {
+  async loadCamera(urlOrData) {
 
-    // Note: Not supporting STRING or OBJECT type camera parameters (yet)
     const target = '/camera_param_' + this.cameraCount++;
 
-    return new Promise((resolve, reject) => {
+    let data;
 
-      new Promise((resolve, reject) => {
-        if(urlOrData instanceof Uint8Array) {
-          resolve(urlOrData);
-        } else {
-          this._fetchRemoteData(urlOrData, true)
-          .then(data => resolve(data))
-          .catch(error => reject(error));
-        }
-      })
-      .then(data => {
-        this._storeDataFile(data, target);
-        resolve(this.instance._loadCamera(target));
-      })
-      .catch(error => {
-        reject(error);
-      });
+    if(urlOrData instanceof Uint8Array) {
+      // assume preloaded camera params
+      data = urlOrData;
+    } else {
+      // fetch data via HTTP
+      try { data = await Utils.fetchRemoteData(urlOrData); }
+      catch(error) { throw error; }
+    }
 
-    });
+    this._storeDataFile(data, target);
 
+    // return the internal marker ID
+    return this.instance._loadCamera(target);
   }
 
-  addMarker() {
+  async addMarker(arId, urlOrData) {
+    
+    const target = '/marker_' + this.markerCount++;
 
+    let data;
+
+    if(urlOrData.indexOf("\n") !== -1) {
+      // assume text from a .patt file
+      data = Utils.string2Uint8Data(urlOrData);
+    } else {
+      // fetch data via HTTP
+      try { data = await Utils.fetchRemoteData(urlOrData); }
+      catch(error) { throw error; }
+    }
+
+    this._storeDataFile(data, target);
+
+    // return the internal marker ID
+    return this.instance._addMarker(arId, target);
   }
 
   addMultiMarker() {
@@ -117,32 +134,12 @@ export default class ARToolkit {
 
   // implementation
 
-  _fetchRemoteData(url, asBinary=false) {
-    return new Promise((resolve, reject) => {
-      const requestOptions = asBinary ?
-        { responseType: 'arraybuffer' } : {};
-      axios.get(url, requestOptions)
-        .then(response => {
-          const data = asBinary ? new Uint8Array(response.data) : response.data;
-          resolve(data);
-        })
-        .catch(error => {
-          reject(error);
-        })
-    });
-  }
-
   _storeDataFile(data, target) {
     // FS is provided by emscripten
-    // Note: strings will always be written as UTF-8
-    // Note2: binary data must be encoded as Uint8Array
-    if(data instanceof Uint8Array) {
-      this.instance.FS.writeFile(target, data, {
-        encoding: 'binary'
-      });
-    } else {
-      this.instance.FS.writeFile(target, data);
-    }
+    // Note: valid data must be in binary format encoded as Uint8Array
+    this.instance.FS.writeFile(target, data, {
+      encoding: 'binary'
+    });
   }
   //----------------------------------------------------------------------------
 }

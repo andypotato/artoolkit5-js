@@ -1,4 +1,4 @@
-import Module from './artoolkit5/artoolkit_wasm.js';
+import Module from './artoolkit5/artoolkit_wasm';
 
 const ModuleLoader = {
   init: () => {
