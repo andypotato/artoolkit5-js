@@ -77,27 +77,6 @@ export default class ARController {
 
     this._bwpointer = false;
   }
-  //----------------------------------------------------------------------------
-
-  // static initializers
-
-  static async initWithDimensions(width, height, cameraParam) {
-
-    // directly init with given width / height
-    const controller = new ARController(width, height, cameraParam);
-    return await controller._initialize();
-  }
-
-  static async initWithImage(image, cameraParam) {
-
-    // get width / height from image / video
-    const width = image.videoWidth || image.width;
-    const height = image.videoHeight || image.height;
-
-    const controller = await ARController.initWithDimensions(width, height, cameraParam);
-    controller.image = image;
-    return controller;
-  }
 
   dispose() {
 
@@ -124,9 +103,32 @@ export default class ARController {
       this[t] = null;
     }
   };
+
+
+  // static initializers
   //----------------------------------------------------------------------------
 
+  static async initWithDimensions(width, height, cameraParam) {
 
+    // directly init with given width / height
+    const controller = new ARController(width, height, cameraParam);
+    return await controller._initialize();
+  }
+
+  static async initWithImage(image, cameraParam) {
+
+    // get width / height from image / video
+    const width = image.videoWidth || image.width;
+    const height = image.videoHeight || image.height;
+
+    const controller = await ARController.initWithDimensions(width, height, cameraParam);
+    controller.image = image;
+    return controller;
+  }
+  
+
+  // marker detection
+  //----------------------------------------------------------------------------
 
   /**
    * Detects markers in the given image. The process method dispatches marker detection events during its run.
@@ -463,6 +465,7 @@ export default class ARController {
     return this.artoolkit.getMultiMarkerNum(this.id, multiMarkerId);
   };
 
+
   // event handling
   //----------------------------------------------------------------------------
 
@@ -503,8 +506,8 @@ export default class ARController {
    * @param {Object} event Event to dispatch.
    */
   dispatchEvent(event) {
-//console.log('Dispatched event');
-//console.log(event);
+console.log('Dispatched event');
+console.log(event);
     let listeners = this.listeners[event.name];
     if(listeners) {
       for(let i = 0; i < listeners.length; i++) {
@@ -546,28 +549,30 @@ export default class ARController {
       this.artoolkit.instance.HEAPU8.buffer,
       this._bwpointer, this.framesize);
 
-    let id = new ImageData(
+    let imageData = new ImageData(
       new Uint8ClampedArray(this.canvas.width * this.canvas.height * 4),
       this.canvas.width, this.canvas.height);
 
     for(let i = 0, j = 0; i < debugBuffer.length; i++ , j += 4) {
       let v = debugBuffer[i];
-      id.data[j + 0] = v;
-      id.data[j + 1] = v;
-      id.data[j + 2] = v;
-      id.data[j + 3] = 255;
+      imageData.data[j + 0] = v;
+      imageData.data[j + 1] = v;
+      imageData.data[j + 2] = v;
+      imageData.data[j + 3] = 255;
     }
-    this.ctx.putImageData(id, 0, 0)
+    this.ctx.putImageData(imageData, 0, 0)
 
     let markerNum = this.getMarkerNum();
     for(let i = 0; i < markerNum; i++) {
       this.drawDebugMarker(this.getMarker(i));
     }
 
+/*
     if(this.transform_mat && this.transformGL_RH) {
-      //console.log("GL 4x4 Matrix: " + this.transform_mat);
-      //console.log("GL_RH 4x4 Mat: " + this.transformGL_RH);
+      console.log("GL 4x4 Matrix: " + this.transform_mat);
+      console.log("GL_RH 4x4 Mat: " + this.transformGL_RH);
     }
+*/
   };
 
   /**
@@ -1302,42 +1307,41 @@ export default class ARController {
    * Copy the Image data to the HEAP for the debugSetup function.
    * @return {number} 0 (void)
    */
-  _copyImageToHeap(image) {
+  _copyImageToHeap(sourceImage) {
 
-    if(!image) {
+    if(!sourceImage) {
     // default to preloaded image
-      image = this.image;
-    }
-
-    let imageData;
-
-    if(image.data) {
-
-      imageData = image;
-
-    } else {
-
-      // @TODO: this only works if there _IS_ a contect
-      this.ctx.save();
-
-      if(this.orientation === 'portrait') {
-        this.ctx.translate(this.canvas.width, 0);
-        this.ctx.rotate(Math.PI / 2);
-        this.ctx.drawImage(image, 0, 0, this.canvas.height, this.canvas.width); // draw video
-      } else {
-        this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height); // draw video
-      }
-
-      this.ctx.restore();
-
-      imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+      sourceImage = this.image;
     }
 
     // this is of type Uint8ClampedArray:
     // The Uint8ClampedArray typed array represents an array of 8-bit unsigned
     // integers clamped to 0-255
     // @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray
-    let data = imageData.data;
+    let data;
+
+    if(sourceImage.data) {
+
+      // directly use source image
+      data = sourceImage.data;
+
+    } else {
+
+      this.ctx.save();
+
+      if(this.orientation === 'portrait') {
+        this.ctx.translate(this.canvas.width, 0);
+        this.ctx.rotate(Math.PI / 2);
+        this.ctx.drawImage(sourceImage, 0, 0, this.canvas.height, this.canvas.width); // draw video
+      } else {
+        this.ctx.drawImage(sourceImage, 0, 0, this.canvas.width, this.canvas.height); // draw video
+      }
+
+      this.ctx.restore();
+
+      let imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+      data = imageData.data;
+    }
 
     // Here we have access to the unmodified video image. We now need to add the videoLuma chanel to be able to serve the underlying ARTK API
     if(this.videoLuma) {
