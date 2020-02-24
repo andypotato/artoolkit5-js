@@ -108,20 +108,20 @@ export default class ARController {
   // static initializers
   //----------------------------------------------------------------------------
 
-  static async initWithDimensions(width, height, cameraParam) {
+  static async initWithDimensions(width, height, cameraParam, options) {
 
     // directly init with given width / height
-    const controller = new ARController(width, height, cameraParam);
+    const controller = new ARController(width, height, cameraParam, options);
     return await controller._initialize();
   }
 
-  static async initWithImage(image, cameraParam) {
+  static async initWithImage(image, cameraParam, options) {
 
     // get width / height from image / video
     const width = image.videoWidth || image.width;
     const height = image.videoHeight || image.height;
 
-    const controller = await ARController.initWithDimensions(width, height, cameraParam);
+    const controller = await ARController.initWithDimensions(width, height, cameraParam, options);
     controller.image = image;
     return controller;
   }
@@ -506,8 +506,8 @@ export default class ARController {
    * @param {Object} event Event to dispatch.
    */
   dispatchEvent(event) {
-console.log('Dispatched event');
-console.log(event);
+//console.log('Dispatched event');
+//console.log(event);
     let listeners = this.listeners[event.name];
     if(listeners) {
       for(let i = 0; i < listeners.length; i++) {
