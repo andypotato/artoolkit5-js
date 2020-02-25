@@ -181,21 +181,21 @@ export default class ARController {
 
     // - pattern markers
     for(k in this.patternMarkers) {
-      o = this.patternMarkers[k]
+      o = this.patternMarkers[k];
       o.inPrevious = o.inCurrent;
       o.inCurrent = false;
     }
 
     // - barcode markers
     for(k in this.barcodeMarkers) {
-      o = this.barcodeMarkers[k]
+      o = this.barcodeMarkers[k];
       o.inPrevious = o.inCurrent;
       o.inCurrent = false;
     }
 
     // - NFT markers
     for(k in this.nftMarkers) {
-      o = this.nftMarkers[k]
+      o = this.nftMarkers[k];
       o.inPrevious = o.inCurrent;
       o.inCurrent = false;
     }
