@@ -1,6 +1,6 @@
 {
   "name": "artoolkit5-js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "ES6 module port of artoolkit5",
   "main": "dist/ARToolkit.js",
   "scripts": {
