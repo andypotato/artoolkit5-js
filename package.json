@@ -1,6 +1,6 @@
 {
   "name": "artoolkit5-js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "ES6 module port of artoolkit5",
   "main": "dist/ARToolkit.js",
   "scripts": {
@@ -22,7 +22,6 @@
     "AR",
     "Augmented Reality",
     "ARToolkit5",
-    "ARToolkitX",
     "Emscripten"
   ],
   "devDependencies": {
