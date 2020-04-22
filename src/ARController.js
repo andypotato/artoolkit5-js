@@ -520,11 +520,11 @@ export default class ARController {
   // debug stuff
   //----------------------------------------------------------------------------
 
-	/**
-	 * Sets up a debug canvas for the AR detection.
+  /**
+   * Sets up a debug canvas for the AR detection.
    * Draws a red marker on top of each detected square in the image.
-	 * The debug canvas is added to document.body.
-	 */
+   * The debug canvas is added to document.body.
+   */
   debugSetup() {
 
     if(typeof document === 'undefined') {
@@ -538,11 +538,11 @@ export default class ARController {
     this._bwpointer = this.getProcessingImage();
   };
 
-	/**
-	 * Draw the black and white image and debug markers to the ARController canvas.
-	 * See setDebugMode.
+  /**
+   * Draw the black and white image and debug markers to the ARController canvas.
+   * See setDebugMode.
    * @return 0 (void)
-	 */
+   */
   debugDraw() {
 
     let debugBuffer = new Uint8ClampedArray(
@@ -830,7 +830,7 @@ export default class ARController {
    * Note that this is actually a count, not an index. A better name for this function would be
    * arGetDetectedMarkerCount, but the current name lives on for historical reasons.
    */
-  getMarkerNum () {
+  getMarkerNum() {
     return this.artoolkit.getMarkerNum(this.id);
   };
 
