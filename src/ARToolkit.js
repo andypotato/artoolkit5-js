@@ -123,8 +123,26 @@ export default class ARToolkit {
     return this.instance._addMarker(arId, target);
   }
 
-  addMultiMarker() {
+  async addMultiMarker(arId, url) {
 
+    const target = '/multi_marker_' + this.multiMarkerCount++;
+
+    const data = await Utils.fetchRemoteData(url);
+    const files = Utils.parseMultiFile(data);
+
+    const storeMarker = async function (file) {
+      const markerUrl = (new URL(file, url)).toString();
+      const data = await Utils.fetchRemoteData(markerUrl);
+      this._storeDataFile(data, file);
+    };
+
+    const promises = files.map(storeMarker);
+    await Promise.all(promises);
+
+    const markerId = this.instance._addMultiMarker(arId, target);
+    const markerNum = this.instance.getMultiMarkerNum(arId, markerId);
+
+    return [markerId, markerNum];
   }
 
   addNFTMarker() {
