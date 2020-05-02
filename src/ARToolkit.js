@@ -145,8 +145,23 @@ export default class ARToolkit {
     return [markerId, markerNum];
   }
 
-  addNFTMarker() {
+  async addNFTMarker(arId, url) {
+    // url doesn't need to be a valid url. Extensions to make it valid will be added here
+    const targetPrefix = '/markerNFT_' + this.markerCount++;
+    const extensions = ['fset', 'iset', 'fset3'];
 
+    const storeMarker = async function (ext) {
+      const fullUrl = url + '.' + ext;
+      const target = targetPrefix + '.' + ext;
+      const data = await Utils.fetchRemoteData(fullUrl);
+      this._storeDataFile(data, target);
+    };
+
+    const promises = extensions.map(storeMarker);
+    await Promise.all(promises);
+
+    // return the internal marker ID
+    return this.instance._addNFTMarker(arId, targetPrefix);
   }
   //----------------------------------------------------------------------------
 
