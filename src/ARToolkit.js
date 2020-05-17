@@ -136,7 +136,7 @@ export default class ARToolkit {
       this._storeDataFile(data, file);
     };
 
-    const promises = files.map(storeMarker);
+    const promises = files.map(storeMarker, this);
     await Promise.all(promises);
 
     const markerId = this.instance._addMultiMarker(arId, target);
@@ -157,7 +157,7 @@ export default class ARToolkit {
       this._storeDataFile(data, target);
     };
 
-    const promises = extensions.map(storeMarker);
+    const promises = extensions.map(storeMarker, this);
     await Promise.all(promises);
 
     // return the internal marker ID
