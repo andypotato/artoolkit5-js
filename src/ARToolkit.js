@@ -123,12 +123,45 @@ export default class ARToolkit {
     return this.instance._addMarker(arId, target);
   }
 
-  addMultiMarker() {
+  async addMultiMarker(arId, url) {
 
+    const target = '/multi_marker_' + this.multiMarkerCount++;
+
+    const data = await Utils.fetchRemoteData(url);
+    const files = Utils.parseMultiFile(data);
+
+    const storeMarker = async function (file) {
+      const markerUrl = (new URL(file, url)).toString();
+      const data = await Utils.fetchRemoteData(markerUrl);
+      this._storeDataFile(data, file);
+    };
+
+    const promises = files.map(storeMarker, this);
+    await Promise.all(promises);
+
+    const markerId = this.instance._addMultiMarker(arId, target);
+    const markerNum = this.instance.getMultiMarkerNum(arId, markerId);
+
+    return [markerId, markerNum];
   }
 
-  addNFTMarker() {
+  async addNFTMarker(arId, url) {
+    // url doesn't need to be a valid url. Extensions to make it valid will be added here
+    const targetPrefix = '/markerNFT_' + this.markerCount++;
+    const extensions = ['fset', 'iset', 'fset3'];
 
+    const storeMarker = async function (ext) {
+      const fullUrl = url + '.' + ext;
+      const target = targetPrefix + '.' + ext;
+      const data = await Utils.fetchRemoteData(fullUrl);
+      this._storeDataFile(data, target);
+    };
+
+    const promises = extensions.map(storeMarker, this);
+    await Promise.all(promises);
+
+    // return the internal marker ID
+    return this.instance._addNFTMarker(arId, targetPrefix);
   }
   //----------------------------------------------------------------------------
 
