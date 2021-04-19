@@ -1,6 +1,6 @@
 {
   "name": "artoolkit5-js",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "ES6 module port of artoolkit5",
   "main": "dist/ARToolkit.js",
   "scripts": {
@@ -25,15 +25,15 @@
     "Emscripten"
   ],
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
-    "babel-loader": "^8.0.6",
-    "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "@babel/core": "^7.12.13",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "babel-loader": "^8.2.1",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^4.2.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.8.4",
-    "axios": "^0.19.2"
+    "@babel/runtime": "^7.12.5",
+    "axios": "^0.21.1"
   }
 }
