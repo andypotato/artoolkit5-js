@@ -1330,8 +1330,6 @@ export default class ARController {
       this.ctx.save();
 
       if(this.orientation === 'portrait') {
-        this.ctx.translate(this.canvas.width, 0);
-        this.ctx.rotate(Math.PI / 2);
         this.ctx.drawImage(sourceImage, 0, 0, this.canvas.height, this.canvas.width); // draw video
       } else {
         this.ctx.drawImage(sourceImage, 0, 0, this.canvas.width, this.canvas.height); // draw video
