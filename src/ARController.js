@@ -11,7 +11,7 @@ export default class ARController {
     }, ...options};
 
     // no point in initializing a member as "undefined"
-    // replaced it with -1 
+    // replaced it with -1
     this.id = -1;
 
     this.width = width;
@@ -125,7 +125,7 @@ export default class ARController {
     controller.image = image;
     return controller;
   }
-  
+
 
   // marker detection
   //----------------------------------------------------------------------------
@@ -137,31 +137,31 @@ export default class ARController {
    * Then, a getNFTMarker event is dispatched for each found NFT marker.
    * Finally, getMultiMarker is dispatched for every found multimarker, followed by getMultiMarkerSub events
    * dispatched for each of the markers in the multimarker.
-   * 
+   *
    *   arController.addEventListener('markerNum', function(ev) {
    *     console.log("Detected " + ev.data + " markers.")
    *   });
-   * 
+   *
    *   arController.addEventListener('getMarker', function(ev) {
    *     console.log("Detected marker with ids:", ev.data.marker.id, ev.data.marker.idPatt, ev.data.marker.idMatrix);
    *     console.log("Marker data", ev.data.marker);
    *     console.log("Marker transform matrix:", [].join.call(ev.data.matrix, ', '));
    *   });
-   * 
+   *
    *   arController.addEventListener('getNFTMarker', function(ev) {
    *     // do stuff
    *   });
-   * 
+   *
    *   arController.addEventListener('getMultiMarker', function(ev) {
    *     console.log("Detected multimarker with id:", ev.data.multiMarkerId);
    *   });
-   * 
+   *
    *   arController.addEventListener('getMultiMarkerSub', function(ev) {
    *     console.log("Submarker for " + ev.data.multiMarkerId, ev.data.markerIndex, ev.data.marker);
    *   });
-   * 
+   *
    *   arController.process(image);
-   * 
+   *
    * If no image is given, defaults to this.image.
    * If the debugSetup has been called, draws debug markers on the debug canvas.
    * @param {ImageElement | VideoElement} image The image to process [optional].
@@ -1330,10 +1330,10 @@ export default class ARController {
       this.ctx.save();
 
       if(this.orientation === 'portrait') {
-        this.ctx.translate(this.canvas.width, 0);
-        this.ctx.rotate(Math.PI / 2);
+        // console.log('Using orientation: ', this.orientation);
         this.ctx.drawImage(sourceImage, 0, 0, this.canvas.height, this.canvas.width); // draw video
       } else {
+        // console.log('Using orientation: ', this.orientation);
         this.ctx.drawImage(sourceImage, 0, 0, this.canvas.width, this.canvas.height); // draw video
       }
 
