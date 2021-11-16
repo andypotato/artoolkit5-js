@@ -157,7 +157,7 @@ FLAGS += ' -s TOTAL_MEMORY=' + MEM + ' ';
 FLAGS += ' -s USE_ZLIB=1';
 FLAGS += ' -s USE_LIBJPEG';
 // @see https://github.com/emscripten-core/emscripten/issues/6061
-FLAGS += ' -s "EXTRA_EXPORTED_RUNTIME_METHODS=[\'FS\']"';
+FLAGS += " -s EXPORTED_RUNTIME_METHODS='[\"FS\"]'"
 FLAGS += ' --memory-init-file 0 '; // for memless file
 FLAGS += ' -s ALLOW_MEMORY_GROWTH=1';
 
