@@ -5,10 +5,12 @@ export default class ARController {
   constructor(width, height, cameraParam, options) {
 
     // read settings
-    this.options = {...{
-      canvas: null,
-      orientation: 'landscape'
-    }, ...options};
+    this.options = {
+      ...{
+        canvas: null,
+        orientation: 'landscape'
+      }, ...options
+    };
 
     // no point in initializing a member as "undefined"
     // replaced it with -1
@@ -55,14 +57,14 @@ export default class ARController {
     this.marker_transform_mat = null;
     this.videoLumaPointer = null;
 
-    if(this.options.canvas) {
+    if (this.options.canvas) {
       // in case you use Node.js, create a canvas with node-canvas
       this.canvas = this.options.canvas;
-    } else if(typeof document !== 'undefined') {
+    } else if (typeof document !== 'undefined') {
       // try creating a canvas from document
       this.canvas = document.createElement('canvas');
     }
-    if(this.canvas) {
+    if (this.canvas) {
       this.canvas.width = width;
       this.canvas.height = height;
       this.ctx = this.canvas.getContext('2d');
@@ -88,18 +90,18 @@ export default class ARController {
     this.cameraParam = '';
     this.cameraLoaded = false;
 
-    if(this.id > -1) {
+    if (this.id > -1) {
       this.artoolkit.teardown(this.id);
     }
 
     // Note: only <video> has an srcObject - images don't
-    if(this.image && this.image.srcObject) {
+    if (this.image && this.image.srcObject) {
       // @TODO: enable
       //ARController._teardownVideo(this.image);
     }
 
     // @TODO: seriously?
-    for(let t in this) {
+    for (let t in this) {
       this[t] = null;
     }
   };
@@ -169,7 +171,7 @@ export default class ARController {
   process(image) {
 
     let result = this.detectMarker(image);
-    if(result != 0) {
+    if (result != 0) {
       console.error('[ARController]', 'detectMarker error:', result);
     }
 
@@ -180,54 +182,54 @@ export default class ARController {
     // get markers
 
     // - pattern markers
-    for(k in this.patternMarkers) {
+    for (k in this.patternMarkers) {
       o = this.patternMarkers[k];
       o.inPrevious = o.inCurrent;
       o.inCurrent = false;
     }
 
     // - barcode markers
-    for(k in this.barcodeMarkers) {
+    for (k in this.barcodeMarkers) {
       o = this.barcodeMarkers[k];
       o.inPrevious = o.inCurrent;
       o.inCurrent = false;
     }
 
     // - NFT markers
-    for(k in this.nftMarkers) {
+    for (k in this.nftMarkers) {
       o = this.nftMarkers[k];
       o.inPrevious = o.inCurrent;
       o.inCurrent = false;
     }
 
     // detect fiducial (aka squared) markers
-    for(let i = 0; i < markerNum; i++) {
+    for (let i = 0; i < markerNum; i++) {
 
       let markerInfo = this.getMarker(i);
 
       let markerType = ARToolkit.UNKNOWN_MARKER;
       let visible = this.trackPatternMarkerId(-1);
 
-      if(markerInfo.idPatt > -1 && (markerInfo.id === markerInfo.idPatt || markerInfo.idMatrix === -1)) {
+      if (markerInfo.idPatt > -1 && (markerInfo.id === markerInfo.idPatt || markerInfo.idMatrix === -1)) {
 
         visible = this.trackPatternMarkerId(markerInfo.idPatt);
         markerType = ARToolkit.PATTERN_MARKER;
 
-        if(markerInfo.dir !== markerInfo.dirPatt) {
+        if (markerInfo.dir !== markerInfo.dirPatt) {
           this.setMarkerInfoDir(i, markerInfo.dirPatt);
         }
       }
-      else if(markerInfo.idMatrix > -1) {
+      else if (markerInfo.idMatrix > -1) {
 
         visible = this.trackBarcodeMarkerId(markerInfo.idMatrix);
         markerType = ARToolkit.BARCODE_MARKER;
 
-        if(markerInfo.dir !== markerInfo.dirMatrix) {
+        if (markerInfo.dir !== markerInfo.dirMatrix) {
           this.setMarkerInfoDir(i, markerInfo.dirMatrix);
         }
       }
 
-      if(markerType !== ARToolkit.UNKNOWN_MARKER && visible.inPrevious) {
+      if (markerType !== ARToolkit.UNKNOWN_MARKER && visible.inPrevious) {
         this.getTransMatSquareCont(i, visible.markerWidth, visible.matrix, visible.matrix);
       } else {
         this.getTransMatSquare(i, visible.markerWidth, visible.matrix);
@@ -256,12 +258,12 @@ export default class ARController {
     // in ms
     let MARKER_LOST_TIME = 200;
 
-    for(let i = 0; i < nftMarkerCount; i++) {
+    for (let i = 0; i < nftMarkerCount; i++) {
 
       let nftMarkerInfo = this.getNFTMarker(i);
       let markerType = ARToolkit.NFT_MARKER;
 
-      if(nftMarkerInfo.found) {
+      if (nftMarkerInfo.found) {
 
         this.nftMarkerFound = i;
         this.nftMarkerFoundTime = Date.now();
@@ -283,10 +285,10 @@ export default class ARController {
           }
         });
       }
-      else if(self.nftMarkerFound === i) {
+      else if (self.nftMarkerFound === i) {
 
         // for now this marker found/lost events handling is for one marker at a time
-        if((Date.now() - this.nftMarkerFoundTime) > MARKER_LOST_TIME) {
+        if ((Date.now() - this.nftMarkerFoundTime) > MARKER_LOST_TIME) {
           this.nftMarkerFound = false;
           this.dispatchEvent({
             name: 'lostNFTMarker',
@@ -305,7 +307,7 @@ export default class ARController {
 
     // detect multiple markers
     let multiMarkerCount = this.getMultiMarkerCount();
-    for(let i = 0; i < multiMarkerCount; i++) {
+    for (let i = 0; i < multiMarkerCount; i++) {
 
       let subMarkerCount = this.getMultiMarkerPatternCount(i);
       let visible = false;
@@ -314,9 +316,9 @@ export default class ARController {
       this.transMatToGLMat(this.marker_transform_mat, this.transform_mat);
       this.transformGL_RH = this.arglCameraViewRHf(this.transform_mat);
 
-      for(let j = 0; j < subMarkerCount; j++) {
+      for (let j = 0; j < subMarkerCount; j++) {
         var multiEachMarkerInfo = this.getMultiEachMarker(i, j);
-        if(multiEachMarkerInfo.visible >= 0) {
+        if (multiEachMarkerInfo.visible >= 0) {
           visible = true;
           this.dispatchEvent({
             name: 'getMultiMarker',
@@ -331,8 +333,8 @@ export default class ARController {
         }
       }
 
-      if(visible) {
-        for(let j = 0; j < subMarkerCount; j++) {
+      if (visible) {
+        for (let j = 0; j < subMarkerCount; j++) {
           var multiEachMarkerInfo = this.getMultiEachMarker(i, j);
           this.transMatToGLMat(this.marker_transform_mat, this.transform_mat);
           this.transformGL_RH = this.arglCameraViewRHf(this.transform_mat);
@@ -351,7 +353,7 @@ export default class ARController {
       }
     }
 
-    if(this._bwpointer) {
+    if (this._bwpointer) {
       this.debugDraw();
     }
   }
@@ -377,7 +379,7 @@ export default class ARController {
   trackPatternMarkerId(id, markerWidth) {
 
     let obj = this.patternMarkers[id];
-    if(!obj) {
+    if (!obj) {
       this.patternMarkers[id] = obj = {
         inPrevious: false,
         inCurrent: false,
@@ -386,7 +388,7 @@ export default class ARController {
         markerWidth: markerWidth || this.defaultMarkerWidth
       };
     }
-    if(markerWidth) {
+    if (markerWidth) {
       obj.markerWidth = markerWidth;
     }
     return obj;
@@ -405,7 +407,7 @@ export default class ARController {
   trackBarcodeMarkerId(id, markerWidth) {
 
     let obj = this.barcodeMarkers[id];
-    if(!obj) {
+    if (!obj) {
       this.barcodeMarkers[id] = obj = {
         inPrevious: false,
         inCurrent: false,
@@ -414,7 +416,7 @@ export default class ARController {
         markerWidth: markerWidth || this.defaultMarkerWidth
       };
     }
-    if(markerWidth) {
+    if (markerWidth) {
       obj.markerWidth = markerWidth;
     }
     return obj;
@@ -433,7 +435,7 @@ export default class ARController {
   trackNFTMarkerId(id, markerWidth) {
 
     let obj = this.nftMarkers[id];
-    if(!obj) {
+    if (!obj) {
       this.nftMarkers[id] = obj = {
         inPrevious: false,
         inCurrent: false,
@@ -442,7 +444,7 @@ export default class ARController {
         markerWidth: markerWidth || this.defaultMarkerWidth
       };
     }
-    if(markerWidth) {
+    if (markerWidth) {
       obj.markerWidth = markerWidth;
     }
     return obj;
@@ -481,7 +483,7 @@ export default class ARController {
    * @param {function} callback Callback function to call when an event with the given name is dispatched.
    */
   addEventListener(name, callback) {
-    if(!this.listeners[name]) {
+    if (!this.listeners[name]) {
       this.listeners[name] = [];
     }
     this.listeners[name].push(callback);
@@ -493,9 +495,9 @@ export default class ARController {
    * @param {function} callback Callback function to remove from the listeners of the named event.
    */
   removeEventListener(name, callback) {
-    if(this.listeners[name]) {
+    if (this.listeners[name]) {
       let index = this.listeners[name].indexOf(callback);
-      if(index > -1) {
+      if (index > -1) {
         this.listeners[name].splice(index, 1);
       }
     }
@@ -506,11 +508,11 @@ export default class ARController {
    * @param {Object} event Event to dispatch.
    */
   dispatchEvent(event) {
-//console.log('Dispatched event');
-//console.log(event);
+    //console.log('Dispatched event');
+    //console.log(event);
     let listeners = this.listeners[event.name];
-    if(listeners) {
-      for(let i = 0; i < listeners.length; i++) {
+    if (listeners) {
+      for (let i = 0; i < listeners.length; i++) {
         listeners[i].call(this, event);
       }
     }
@@ -527,7 +529,7 @@ export default class ARController {
    */
   debugSetup() {
 
-    if(typeof document === 'undefined') {
+    if (typeof document === 'undefined') {
       console.log('debugSetup() currently only supports Browser environments');
       return;
     }
@@ -553,7 +555,7 @@ export default class ARController {
       new Uint8ClampedArray(this.canvas.width * this.canvas.height * 4),
       this.canvas.width, this.canvas.height);
 
-    for(let i = 0, j = 0; i < debugBuffer.length; i++ , j += 4) {
+    for (let i = 0, j = 0; i < debugBuffer.length; i++, j += 4) {
       let v = debugBuffer[i];
       imageData.data[j + 0] = v;
       imageData.data[j + 1] = v;
@@ -563,16 +565,16 @@ export default class ARController {
     this.ctx.putImageData(imageData, 0, 0)
 
     let markerNum = this.getMarkerNum();
-    for(let i = 0; i < markerNum; i++) {
+    for (let i = 0; i < markerNum; i++) {
       this.drawDebugMarker(this.getMarker(i));
     }
 
-/*
-    if(this.transform_mat && this.transformGL_RH) {
-      console.log("GL 4x4 Matrix: " + this.transform_mat);
-      console.log("GL_RH 4x4 Mat: " + this.transformGL_RH);
-    }
-*/
+    /*
+        if(this.transform_mat && this.transformGL_RH) {
+          console.log("GL 4x4 Matrix: " + this.transform_mat);
+          console.log("GL_RH 4x4 Mat: " + this.transformGL_RH);
+        }
+    */
   };
 
   /**
@@ -722,7 +724,7 @@ export default class ARController {
    */
   transMatToGLMat(transMat, glMat, scale) {
 
-    if(glMat == undefined) {
+    if (glMat == undefined) {
       glMat = new Float64Array(16);
     }
 
@@ -743,7 +745,7 @@ export default class ARController {
     glMat[3 + 2 * 4] = 0.0;
     glMat[3 + 3 * 4] = 1.0;
 
-    if(scale != undefined && scale !== 0.0) {
+    if (scale != undefined && scale !== 0.0) {
       glMat[12] *= scale;
       glMat[13] *= scale;
       glMat[14] *= scale;
@@ -762,7 +764,7 @@ export default class ARController {
   arglCameraViewRHf(glMatrix, glRhMatrix, scale) {
 
     let m_modelview;
-    if(glRhMatrix == undefined)
+    if (glRhMatrix == undefined)
       m_modelview = new Float64Array(16);
     else
       m_modelview = glRhMatrix;
@@ -789,7 +791,7 @@ export default class ARController {
     m_modelview[11] = 0;
     m_modelview[15] = 1;
 
-    if(scale != undefined && scale !== 0.0) {
+    if (scale != undefined && scale !== 0.0) {
       m_modelview[12] *= scale;
       m_modelview[13] *= scale;
       m_modelview[14] *= scale;
@@ -818,7 +820,7 @@ export default class ARController {
    * A result of 0 does not however, imply any markers were detected.
    */
   detectMarker(image) {
-    if(this._copyImageToHeap(image)) {
+    if (this._copyImageToHeap(image)) {
       return this.artoolkit.detectMarker(this.id);
     }
     return -99;
@@ -860,7 +862,7 @@ export default class ARController {
    * @returns {Object} The markerInfo struct.
    */
   getMarker(markerIndex) {
-    if(0 === this.artoolkit.getMarker(this.id, markerIndex)) {
+    if (0 === this.artoolkit.getMarker(this.id, markerIndex)) {
       return this.artoolkit.markerInfo;
     }
   };
@@ -875,7 +877,7 @@ export default class ARController {
    * @returns {Object} The NFTmarkerInfo struct.
    */
   getNFTMarker(markerIndex) {
-    if(0 === this.artoolkit.getNFTMarker(this.id, markerIndex)) {
+    if (0 === this.artoolkit.getNFTMarker(this.id, markerIndex)) {
       return this.artoolkit.NFTMarkerInfo;
     }
   };
@@ -889,7 +891,7 @@ export default class ARController {
    * @param {*} vertexData
    */
   setMarkerInfoVertex(markerIndex, vertexData) {
-    for(let i = 0; i < vertexData.length; i++) {
+    for (let i = 0; i < vertexData.length; i++) {
       this.marker_transform_mat[i * 2 + 0] = vertexData[i][0];
       this.marker_transform_mat[i * 2 + 1] = vertexData[i][1];
     }
@@ -920,7 +922,7 @@ export default class ARController {
    * @returns {Object} The markerInfo struct.
    */
   getMultiEachMarker(multiMarkerId, markerIndex) {
-    if(0 === this.artoolkit.getMultiEachMarker(this.id, multiMarkerId, markerIndex)) {
+    if (0 === this.artoolkit.getMultiEachMarker(this.id, multiMarkerId, markerIndex)) {
       return this.artoolkit.multiEachMarkerInfo;
     }
   };
@@ -1201,7 +1203,7 @@ export default class ARController {
    * If compatibility with ARToolKit verions 1.0 through 4.4 is required, this value
    * must be 0.5.
    */
-   setPattRatio(pattRatio) {
+  setPattRatio(pattRatio) {
     return this.artoolkit.setPattRatio(this.id, pattRatio);
   };
 
@@ -1309,8 +1311,8 @@ export default class ARController {
    */
   _copyImageToHeap(sourceImage) {
 
-    if(!sourceImage) {
-    // default to preloaded image
+    if (!sourceImage) {
+      // default to preloaded image
       sourceImage = this.image;
     }
 
@@ -1320,7 +1322,7 @@ export default class ARController {
     // @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray
     let data;
 
-    if(sourceImage.data) {
+    if (sourceImage.data) {
 
       // directly use source image
       data = sourceImage.data;
@@ -1329,9 +1331,15 @@ export default class ARController {
 
       this.ctx.save();
 
-      if(this.orientation === 'portrait') {
+      if (this.orientation === 'portrait') {
         // console.log('Using orientation: ', this.orientation);
-        this.ctx.drawImage(sourceImage, 0, 0, this.canvas.height, this.canvas.width); // draw video
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        //portrait
+        var scale = this.canvas.height / this.canvas.width;
+        var scaledHeight = this.canvas.width * scale;
+        var scaledWidth = this.canvas.height * scale;
+        var marginLeft = (this.canvas.width - scaledWidth) / 2;
+        this.ctx.drawImage(sourceImage, marginLeft, 0, scaledWidth, scaledHeight); // draw video
       } else {
         // console.log('Using orientation: ', this.orientation);
         this.ctx.drawImage(sourceImage, 0, 0, this.canvas.width, this.canvas.height); // draw video
@@ -1344,13 +1352,13 @@ export default class ARController {
     }
 
     // Here we have access to the unmodified video image. We now need to add the videoLuma chanel to be able to serve the underlying ARTK API
-    if(this.videoLuma) {
+    if (this.videoLuma) {
 
       let q = 0;
 
       // Create luma from video data assuming Pixelformat AR_PIXEL_FORMAT_RGBA
       // see (ARToolKitJS.cpp L: 43)
-      for(let p = 0; p < this.videoSize; p++) {
+      for (let p = 0; p < this.videoSize; p++) {
         let r = data[q + 0], g = data[q + 1], b = data[q + 2];
         // @see https://stackoverflow.com/a/596241/5843642
         this.videoLuma[p] = (r + r + r + b + g + g + g + g) >> 3;
@@ -1358,7 +1366,7 @@ export default class ARController {
       }
     }
 
-    if(this.dataHeap) {
+    if (this.dataHeap) {
       this.dataHeap.set(data);
       return true;
     }

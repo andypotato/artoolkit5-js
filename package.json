@@ -4,7 +4,7 @@
   "description": "ES6 module port of artoolkit5",
   "main": "dist/ARToolkit.js",
   "scripts": {
-    "dev": "webpack --mode development --progress --colors --watch",
+    "dev": "webpack --mode development --progress --color --watch",
     "build": "webpack --mode production",
     "build-lib": "node ./scripts/makem.js"
   },
@@ -26,14 +26,14 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "@babel/plugin-transform-runtime": "^7.16.0",
-    "@babel/preset-env": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/preset-env": "^7.16.4",
     "babel-loader": "^8.2.3",
-    "webpack": "^5.61.0",
+    "webpack": "^5.64.1",
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.16.0",
+    "@babel/runtime": "^7.16.3",
     "axios": "^0.24.0"
   }
 }
