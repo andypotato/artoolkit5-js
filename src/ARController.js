@@ -1332,9 +1332,9 @@ export default class ARController {
       this.ctx.save();
 
       if (this.orientation === 'portrait') {
+        //portrait
         // console.log('Using orientation: ', this.orientation);
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        //portrait
         var scale = this.canvas.height / this.canvas.width;
         var scaledHeight = this.canvas.width * scale;
         var scaledWidth = this.canvas.height * scale;
