@@ -38,3 +38,7 @@ node_modules/
 .cache
 .vscode
 .DS_Store
+
+# other files
+src/artoolkit5/*.bc
+dist/*.LICENSE.txt
