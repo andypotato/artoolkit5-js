@@ -28,6 +28,12 @@
 
 #define PAGES_MAX               10          // Maximum number of pages expected. You can change this down (to save memory) or up (to accomodate more pages.)
 
+struct nftMarker {
+	int id_NFT;
+	int width_NFT;
+	int height_NFT;
+	int dpi_NFT;
+};
 struct multi_marker {
 	int id;
 	ARMultiMarkerInfoT *multiMarkerHandle;
@@ -59,6 +65,10 @@ struct arController {
 	int surfaceSetCount = 0; // Running NFT marker id
 	AR2SurfaceSetT      *surfaceSet[PAGES_MAX];
 	std::unordered_map<int, AR2SurfaceSetT*> surfaceSets;
+
+	// nftMarker struct inside arController
+	nftMarker nft;
+    std::vector<nftMarker> nftMarkers;
 
 	ARdouble nearPlane = 0.0001;
 	ARdouble farPlane = 1000.0;
@@ -313,9 +323,30 @@ extern "C" {
 		if ((arc->surfaceSet[surfaceSetCount] = ar2ReadSurfaceSet(datasetPathname, "fset", NULL)) == NULL ) {
 		    ARLOGe("Error reading data from %s.fset\n", datasetPathname);
 		}
-		ARLOGi("  Done.\n");
+        // int surfaceSetCount = arc->surfaceSetCount;
+        int numIset = arc->surfaceSet[i]->surface[0].imageSet->num;
+        arc->nft.width_NFT =
+                    arc->surfaceSet[i]->surface[0].imageSet->scale[0]->xsize;
+        arc->nft.height_NFT =
+                    arc->surfaceSet[i]->surface[0].imageSet->scale[0]->ysize;
+        arc->nft.dpi_NFT =
+                    arc->surfaceSet[i]->surface[0].imageSet->scale[0]->dpi;
 
-	if (surfaceSetCount == PAGES_MAX) exit(-1);
+        ARLOGi("NFT num. of ImageSet: %i", numIset);
+        ARLOGi("NFT marker width: %i", arc->nft.width_NFT);
+        ARLOGi("NFT marker height: %i", arc->nft.height_NFT);
+        ARLOGi("NFT marker dpi: %i", arc->nft.dpi_NFT);
+
+        arc->nft.id_NFT = i;
+        arc->nft.width_NFT = arc->nft.width_NFT;
+        arc->nft.height_NFT = arc->nft.height_NFT;
+        arc->nft.dpi_NFT = arc->nft.dpi_NFT;
+        arc->nftMarkers.push_back(arc->nft);
+
+        ARLOGi("  Done.\n");
+
+        if (surfaceSetCount == PAGES_MAX)
+            exit(-1);
 
 		if (kpmSetRefDataSet(kpmHandle, refDataSet) < 0) {
 		    ARLOGe("Error: kpmSetRefDataSet\n");
@@ -325,6 +356,13 @@ extern "C" {
 
 		ARLOGi("Loading of NFT data complete.\n");
 		return (TRUE);
+	}
+
+	nftMarker getNFTData(int id, int index) {
+		if (arControllers.find(id) == arControllers.end()) { return {}; }
+		arController *arc = &(arControllers[id]);
+		// get marker(s) nft data.
+		return arc->nftMarkers.at(index);
 	}
 
 	/***************

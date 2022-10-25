@@ -4,6 +4,8 @@ using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(constant_bindings) {
 
+	register_vector<nftMarker>("nftMarkers");
+
 	function("setup", &setup);
 	function("teardown", &teardown);
 
@@ -35,6 +37,14 @@ EMSCRIPTEN_BINDINGS(constant_bindings) {
 	function("getMultiEachMarker", &getMultiEachMarkerInfo);
 	function("getMarker", &getMarkerInfo);
 	function("getNFTMarker", &getNFTMarkerInfo);
+	function("getNFTData", &getNFTData);
+
+	/* nft marker struct */
+	value_object<nftMarker>("nftMarker")
+	.field("id", &nftMarker::id_NFT)
+	.field("width", &nftMarker::width_NFT)
+	.field("height", &nftMarker::height_NFT)
+	.field("dpi", &nftMarker::dpi_NFT);
 
 
 	/* AR Toolkit C APIS */

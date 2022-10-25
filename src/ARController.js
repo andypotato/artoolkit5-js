@@ -882,6 +882,10 @@ export default class ARController {
     }
   };
 
+  getNFTData(id, index) {
+    return this.artoolkit.getNFTData(id, index);
+  }
+
   /**
    * Set marker vertices to the given vertexData[4][2] array.
    * Sets the marker pos to the center of the vertices.

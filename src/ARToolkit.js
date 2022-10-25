@@ -58,7 +58,7 @@ export default class ARToolkit {
       'getMultiMarkerNum', 'getMultiMarkerCount',
       'detectMarker', 'getMarkerNum',
       'detectNFTMarker',
-      'getNFTMarker', 'getMarker',
+      'getNFTMarker', 'getNFTData', 'getMarker',
       'getMultiEachMarker',
       'setProjectionNearPlane', 'getProjectionNearPlane',
       'setProjectionFarPlane', 'getProjectionFarPlane',
