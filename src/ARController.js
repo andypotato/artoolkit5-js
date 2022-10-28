@@ -1159,6 +1159,8 @@ export default class ARController {
    * AR_MATRIX_CODE_4x4
    * AR_MATRIX_CODE_4x4_BCH_13_9_3
    * AR_MATRIX_CODE_4x4_BCH_13_5_5
+   * AR_MATRIX_CODE_5x5_BCH_22_12_5
+   * AR_MATRIX_CODE_5x5_BCH_22_7_7
    * AR_MATRIX_CODE_5x5
    * AR_MATRIX_CODE_6x6
    * The default mode is AR_MATRIX_CODE_3x3.
