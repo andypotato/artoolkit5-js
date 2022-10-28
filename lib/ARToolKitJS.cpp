@@ -332,10 +332,10 @@ extern "C" {
         arc->nft.dpi_NFT =
                     arc->surfaceSet[i]->surface[0].imageSet->scale[0]->dpi;
 
-        ARLOGi("NFT num. of ImageSet: %i", numIset);
-        ARLOGi("NFT marker width: %i", arc->nft.width_NFT);
-        ARLOGi("NFT marker height: %i", arc->nft.height_NFT);
-        ARLOGi("NFT marker dpi: %i", arc->nft.dpi_NFT);
+        ARLOGi("NFT num. of ImageSet: %i\n", numIset);
+        ARLOGi("NFT marker width: %i\n", arc->nft.width_NFT);
+        ARLOGi("NFT marker height: %i\n", arc->nft.height_NFT);
+        ARLOGi("NFT marker dpi: %i\n", arc->nft.dpi_NFT);
 
         arc->nft.id_NFT = i;
         arc->nft.width_NFT = arc->nft.width_NFT;
