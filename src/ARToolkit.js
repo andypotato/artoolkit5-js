@@ -13,7 +13,9 @@ export default class ARToolkit {
   static get BARCODE_MARKER() { return BARCODE_MARKER; }
   static get NFT_MARKER()     { return NFT_MARKER; }
 
-  // construction
+  /**
+   * Deafult constructor.
+   */
   constructor() {
 
     // reference to WASM module
@@ -28,6 +30,11 @@ export default class ARToolkit {
   //----------------------------------------------------------------------------
 
   // initialization
+  /**
+   * Init the ARToolKit space with all the Emscripten instanced methods. 
+   * It creates also a global artoolkit variable.
+   * @returns {ARToolkit}
+   */
   async init() {
 
     const runtime = await ModuleLoader.init();
@@ -83,6 +90,11 @@ export default class ARToolkit {
   //----------------------------------------------------------------------------
 
   // public accessors
+  /**
+   * Load the camera parameter file. You need to provide a valid url.
+   * @param {string} urlOrData 
+   * @returns 
+   */
   async loadCamera(urlOrData) {
 
     const target = '/camera_param_' + this.cameraCount++;
@@ -104,6 +116,13 @@ export default class ARToolkit {
     return this.instance._loadCamera(target);
   }
 
+  /**
+   * Add a Marker to ARToolkit instance. Used by the ARController class. 
+   * It is preferred to use loadMarker instead with a new ARcontroller instance.
+   * @param {number} arId 
+   * @param {string} urlOrData 
+   * @returns {number} 
+   */
   async addMarker(arId, urlOrData) {
     
     const target = '/marker_' + this.markerCount++;
@@ -125,6 +144,13 @@ export default class ARToolkit {
     return this.instance._addMarker(arId, target);
   }
 
+  /**
+   * Add a multi marker config file. Used by the ARController class. 
+   * It is preferred to use loadMultiMarker instead with a new ARcontroller instance.
+   * @param {number} arId 
+   * @param {string} url 
+   * @returns {Array}
+   */
   async addMultiMarker(arId, url) {
 
     const target = '/multi_marker_' + this.multiMarkerCount++;
@@ -147,6 +173,14 @@ export default class ARToolkit {
     return [markerId, markerNum];
   }
 
+  /**
+   * Add a NFT marker file. You need to provide the url of the marker without the extension. 
+   * Used by the ARController class. 
+   * It is preferred to use loadNFTMarker instead with a new ARcontroller instance.
+   * @param {number} arId 
+   * @param {string} url 
+   * @returns {number}
+   */
   async addNFTMarker(arId, url) {
     // url doesn't need to be a valid url. Extensions to make it valid will be added here
     const targetPrefix = '/markerNFT_' + this.markerCount++;

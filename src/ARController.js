@@ -2,6 +2,14 @@ import ARToolkit from './ARToolkit';
 
 export default class ARController {
 
+  /** 
+   * The ARController constructor. Init a new instance of the class with
+   * width, height of the Image/Video, the url of Camera parameter file, and other options.
+   * @param {number} width of the Image/Video source.
+   * @param {number} height of the Image/Video source.
+   * @param {string} cameraParam url.
+   * @param {object} options
+   */
   constructor(width, height, cameraParam, options) {
 
     // read settings
@@ -80,6 +88,11 @@ export default class ARController {
     this._bwpointer = false;
   }
 
+
+  /**
+   * Dispose the instance of the class, with all associated objects.
+   * @returns {void}
+   */
   dispose() {
 
     // dispose of the camera
@@ -109,14 +122,30 @@ export default class ARController {
 
   // static initializers
   //----------------------------------------------------------------------------
-
+  /**
+   * Static initializer, the preferred way to init the whole app.
+   * You must provide width and height of the video, and the url of the camera parameter file.
+   * @param {number} width 
+   * @param {number} height 
+   * @param {string} cameraParam 
+   * @param {object} options 
+   * @returns {ARController}
+   */
   static async initWithDimensions(width, height, cameraParam, options) {
 
     // directly init with given width / height
     const controller = new ARController(width, height, cameraParam, options);
     return await controller._initialize();
   }
-
+  
+  /**
+   * Static initializer with an image element.
+   * You must provide an image element, and the url of the camera parameter file.
+   * @param {HTMLImageElement} image 
+   * @param {string} cameraParam 
+   * @param {object} options 
+   * @returns {ARController}
+   */
   static async initWithImage(image, cameraParam, options) {
 
     // get width / height from image / video
@@ -166,7 +195,7 @@ export default class ARController {
    *
    * If no image is given, defaults to this.image.
    * If the debugSetup has been called, draws debug markers on the debug canvas.
-   * @param {ImageElement | VideoElement} image The image to process [optional].
+   * @param {HTMLImageElement | HTMLVideoElement} image The image to process [optional].
    */
   process(image) {
 
@@ -815,7 +844,7 @@ export default class ARController {
    * structures with information on each detected marker, followed by a step in which
    * detected markers are possibly examined for some measure of goodness of match (e.g. by
    * examining the match confidence value) and pose extraction.
-   * @param {image} Image to be processed to detect markers.
+   * @param {HTMLImageElement | HTMLVideoElement} image to be processed to detect markers.
    * @return {number} 0 if the function proceeded without error, or a value less than 0 in case of error.
    * A result of 0 does not however, imply any markers were detected.
    */
@@ -859,7 +888,7 @@ export default class ARController {
    * @field      line Line equations for the 4 sides of the marker.
    * @field      vertex 2D positions (in camera image coordinates, origin at top-left) of the corners of the marker. vertex[(4 - dir)%4][] is the top-left corner of the marker. Other vertices proceed clockwise from this. These are idealised coordinates (i.e. the onscreen position aligns correctly with the undistorted camera image.)
    * @param {number} markerIndex The index of the marker to query.
-   * @returns {Object} The markerInfo struct.
+   * @returns {object} The markerInfo struct.
    */
   getMarker(markerIndex) {
     if (0 === this.artoolkit.getMarker(this.id, markerIndex)) {
@@ -874,14 +903,20 @@ export default class ARController {
    * Returns undefined if no marker was found.
    * A markerIndex of -1 is used to access the global custom marker.
    * @param {number} markerIndex The index of the NFT marker to query.
-   * @returns {Object} The NFTmarkerInfo struct.
+   * @returns {object} The NFTmarkerInfo struct.
    */
   getNFTMarker(markerIndex) {
     if (0 === this.artoolkit.getNFTMarker(this.id, markerIndex)) {
       return this.artoolkit.NFTMarkerInfo;
     }
   };
-
+  
+  /**
+   * Useful function to get NFT data of the loaded marker (width, height and dpi).
+   * @param {number} id 
+   * @param {number} index 
+   * @returns {object}
+   */
   getNFTData(id, index) {
     return this.artoolkit.getNFTData(id, index);
   }
@@ -904,8 +939,8 @@ export default class ARController {
 
   /**
    * Makes a deep copy of the given marker info.
-   * @param {Object} markerInfo The marker info object to copy.
-   * @return {Object} The new copy of the marker info.
+   * @param {object} markerInfo The marker info object to copy.
+   * @return {object} The new copy of the marker info.
    */
   cloneMarkerInfo(markerInfo) {
     return JSON.parse(JSON.stringify(markerInfo));
@@ -923,7 +958,7 @@ export default class ARController {
    * @field {number} width The width of the marker.
    * @param {number} multiMarkerId The multimarker to query.
    * @param {number} markerIndex The index of the marker to query.
-   * @returns {Object} The markerInfo struct.
+   * @returns {object} The markerInfo struct.
    */
   getMultiEachMarker(multiMarkerId, markerIndex) {
     if (0 === this.artoolkit.getMultiEachMarker(this.id, multiMarkerId, markerIndex)) {
