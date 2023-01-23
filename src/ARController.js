@@ -129,7 +129,7 @@ export default class ARController {
    * @param {number} height 
    * @param {string} cameraParam 
    * @param {object} options 
-   * @returns {ARController}
+   * @returns {Promise<ARController>}
    */
   static async initWithDimensions(width, height, cameraParam, options) {
 
@@ -144,7 +144,7 @@ export default class ARController {
    * @param {HTMLImageElement} image 
    * @param {string} cameraParam 
    * @param {object} options 
-   * @returns {ARController}
+   * @returns {Promise<ARController>}
    */
   static async initWithImage(image, cameraParam, options) {
 

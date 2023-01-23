@@ -6,18 +6,18 @@ export default class ARController {
      * @param {number} height
      * @param {string} cameraParam
      * @param {object} options
-     * @returns {ARController}
+     * @returns {Promise<ARController>}
      */
-    static initWithDimensions(width: number, height: number, cameraParam: string, options: object): ARController;
+    static initWithDimensions(width: number, height: number, cameraParam: string, options: object): Promise<ARController>;
     /**
      * Static initializer with an image element.
      * You must provide an image element, and the url of the camera parameter file.
      * @param {HTMLImageElement} image
      * @param {string} cameraParam
      * @param {object} options
-     * @returns {ARController}
+     * @returns {Promise<ARController>}
      */
-    static initWithImage(image: HTMLImageElement, cameraParam: string, options: object): ARController;
+    static initWithImage(image: HTMLImageElement, cameraParam: string, options: object): Promise<ARController>;
     /**
      * The ARController constructor. Init a new instance of the class with
      * width, height of the Image/Video, the url of Camera parameter file, and other options.
