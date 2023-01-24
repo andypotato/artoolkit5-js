@@ -13,6 +13,9 @@ export default class ARController {
   constructor(width, height, cameraParam, options) {
 
     // read settings
+    /**
+    * @private
+    */
     this.options = {
       ...{
         canvas: null,
@@ -22,51 +25,128 @@ export default class ARController {
 
     // no point in initializing a member as "undefined"
     // replaced it with -1
+    /**
+     * @private
+     */
     this.id = -1;
 
+
+    /**
+     * @private
+     */
     this.width = width;
+    /**
+     * @private
+     */
     this.height = height;
 
     // holds an image in case the instance was initialized with an image
+    /**
+     * @private
+     */
     this.image;
 
     // default camera orientation
+    /**
+     * @private
+     */
     this.orientation = this.options.orientation;
 
     // this is a replacement for ARCameraParam
+    /**
+     * @private
+     */
     this.cameraParam = cameraParam;
+    /**
+     * @private
+     */
     this.cameraId = -1;
+    /**
+     * @private
+     */
     this.cameraLoaded = false;
 
     // toolkit instance
+    /**
+     * @private
+     */
     this.artoolkit;
 
     // to register observers as event listeners
+    /**
+     * @private
+     */
     this.listeners = {};
-
+    /**
+     * @private
+     */
     this.defaultMarkerWidth = 1;
-
+    /**
+     * @private
+     */
     this.patternMarkers = {};
+    /**
+     * @private
+     */
     this.barcodeMarkers = {};
+    /**
+     * @private
+     */
     this.nftMarkers = {};
-
+    /**
+     * @private
+     */
     this.transform_mat = new Float32Array(16);
+    /**
+    * @private
+    */
     this.transformGL_RH = new Float64Array(16);
-
+    /**
+     * @private
+     */
     this.videoWidth = width;
+    /**
+     * @private
+     */
     this.videoHeight = height;
+    /**
+     * @private
+     */
     this.videoSize = this.videoWidth * this.videoHeight;
-
+    /**
+     * @private
+     */
     this.framepointer = null;
+    /**
+     * @private
+     */
     this.framesize = null;
+    /**
+     * @private
+     */
     this.dataHeap = null;
+    /**
+     * @private
+     */
     this.videoLuma = null;
+    /**
+     * @private
+     */
     this.camera_mat = null;
+    /**
+     * @private
+     */
     this.marker_transform_mat = null;
+    /**
+     * @private
+     */
     this.videoLumaPointer = null;
 
     if (this.options.canvas) {
       // in case you use Node.js, create a canvas with node-canvas
+      /**
+       * @private
+       */
       this.canvas = this.options.canvas;
     } else if (typeof document !== 'undefined') {
       // try creating a canvas from document
@@ -75,16 +155,30 @@ export default class ARController {
     if (this.canvas) {
       this.canvas.width = width;
       this.canvas.height = height;
+      /**
+       * @private
+       */
       this.ctx = this.canvas.getContext('2d');
     } else {
       console.warn('No canvas available');
     }
 
     // this is to workaround the introduction of "self" variable
+    /**
+     * @private
+     */
     this.nftMarkerFound = false;
+    /**
+     * @private
+     */
     this.nftMarkerFoundTime = false;
+    /**
+     * @private
+     */
     this.nftMarkerCount = 0;
-
+    /**
+     * @private
+     */
     this._bwpointer = false;
   }
 
@@ -137,7 +231,7 @@ export default class ARController {
     const controller = new ARController(width, height, cameraParam, options);
     return await controller._initialize();
   }
-  
+
   /**
    * Static initializer with an image element.
    * You must provide an image element, and the url of the camera parameter file.
@@ -919,7 +1013,7 @@ export default class ARController {
       return this.artoolkit.NFTMarkerInfo;
     }
   };
-  
+
   /**
    * Useful function to get NFT data of the loaded marker (width, height and dpi).
    * @param {number} id the internal id

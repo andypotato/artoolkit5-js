@@ -27,37 +27,130 @@ export default class ARController {
      * @param {object} [options]
      */
     constructor(width: number, height: number, cameraParam: string, options?: object);
-    options: any;
-    id: number;
-    width: number;
-    height: number;
-    orientation: any;
-    cameraParam: string;
-    cameraId: number;
-    cameraLoaded: boolean;
-    listeners: {};
-    defaultMarkerWidth: number;
-    patternMarkers: {};
-    barcodeMarkers: {};
-    nftMarkers: {};
-    transform_mat: Float32Array;
-    transformGL_RH: Float64Array;
-    videoWidth: number;
-    videoHeight: number;
-    videoSize: number;
-    framepointer: any;
-    framesize: any;
-    dataHeap: Uint8Array;
-    videoLuma: Uint8Array;
-    camera_mat: Float64Array;
-    marker_transform_mat: Float64Array;
-    videoLumaPointer: any;
-    canvas: any;
-    ctx: any;
-    nftMarkerFound: boolean;
-    nftMarkerFoundTime: boolean;
-    nftMarkerCount: number;
-    _bwpointer: boolean;
+    /**
+    * @private
+    */
+    private options;
+    /**
+     * @private
+     */
+    private id;
+    /**
+     * @private
+     */
+    private width;
+    /**
+     * @private
+     */
+    private height;
+    /**
+     * @private
+     */
+    private orientation;
+    /**
+     * @private
+     */
+    private cameraParam;
+    /**
+     * @private
+     */
+    private cameraId;
+    /**
+     * @private
+     */
+    private cameraLoaded;
+    /**
+     * @private
+     */
+    private listeners;
+    /**
+     * @private
+     */
+    private defaultMarkerWidth;
+    /**
+     * @private
+     */
+    private patternMarkers;
+    /**
+     * @private
+     */
+    private barcodeMarkers;
+    /**
+     * @private
+     */
+    private nftMarkers;
+    /**
+     * @private
+     */
+    private transform_mat;
+    /**
+    * @private
+    */
+    private transformGL_RH;
+    /**
+     * @private
+     */
+    private videoWidth;
+    /**
+     * @private
+     */
+    private videoHeight;
+    /**
+     * @private
+     */
+    private videoSize;
+    /**
+     * @private
+     */
+    private framepointer;
+    /**
+     * @private
+     */
+    private framesize;
+    /**
+     * @private
+     */
+    private dataHeap;
+    /**
+     * @private
+     */
+    private videoLuma;
+    /**
+     * @private
+     */
+    private camera_mat;
+    /**
+     * @private
+     */
+    private marker_transform_mat;
+    /**
+     * @private
+     */
+    private videoLumaPointer;
+    /**
+     * @private
+     */
+    private canvas;
+    /**
+     * @private
+     */
+    private ctx;
+    /**
+     * @private
+     */
+    private nftMarkerFound;
+    /**
+     * @private
+     */
+    private nftMarkerFoundTime;
+    /**
+     * @private
+     */
+    private nftMarkerCount;
+    /**
+     * @private
+     */
+    private _bwpointer;
     /**
      * Dispose the instance of the class, with all associated objects.
      * @returns {void}
