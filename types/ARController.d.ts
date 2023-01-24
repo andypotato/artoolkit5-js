@@ -5,28 +5,28 @@ export default class ARController {
      * @param {number} width
      * @param {number} height
      * @param {string} cameraParam
-     * @param {object} options
+     * @param {object} [options]
      * @returns {Promise<ARController>}
      */
-    static initWithDimensions(width: number, height: number, cameraParam: string, options: object): Promise<ARController>;
+    static initWithDimensions(width: number, height: number, cameraParam: string, options?: object): Promise<ARController>;
     /**
      * Static initializer with an image element.
      * You must provide an image element, and the url of the camera parameter file.
      * @param {HTMLImageElement} image
      * @param {string} cameraParam
-     * @param {object} options
+     * @param {object} [options]
      * @returns {Promise<ARController>}
      */
-    static initWithImage(image: HTMLImageElement, cameraParam: string, options: object): Promise<ARController>;
+    static initWithImage(image: HTMLImageElement, cameraParam: string, options?: object): Promise<ARController>;
     /**
      * The ARController constructor. Init a new instance of the class with
      * width, height of the Image/Video, the url of Camera parameter file, and other options.
      * @param {number} width of the Image/Video source.
      * @param {number} height of the Image/Video source.
      * @param {string} cameraParam url.
-     * @param {object} options
+     * @param {object} [options]
      */
-    constructor(width: number, height: number, cameraParam: string, options: object);
+    constructor(width: number, height: number, cameraParam: string, options?: object);
     options: any;
     id: number;
     width: number;
@@ -98,13 +98,15 @@ export default class ARController {
      * If no image is given, defaults to this.image.
      * If the debugSetup has been called, draws debug markers on the debug canvas.
      * @param {HTMLImageElement | HTMLVideoElement} image The image to process [optional].
+     * @returns {void}
      */
     process(image: HTMLImageElement | HTMLVideoElement): void;
     /**
      * Detects the NFT markers in the process() function,
      * with the given tracked id.
+     * @returns {number}
      */
-    detectNFTMarker(): void;
+    detectNFTMarker(): number;
     /**
      * Adds the given pattern marker ID to the index of tracked IDs.
      * Sets the markerWidth for the pattern marker to markerWidth.
@@ -159,50 +161,57 @@ export default class ARController {
      * - load - dispatched when the ARController is ready to use (useful if passing in a camera URL in the constructor)
      * @param {string} name Name of the event to listen to.
      * @param {function} callback Callback function to call when an event with the given name is dispatched.
+     * @returns {void}
      */
     addEventListener(name: string, callback: Function): void;
     /**
      * Remove an event listener from the named event.
      * @param {string} name Name of the event to stop listening to.
      * @param {function} callback Callback function to remove from the listeners of the named event.
+     * @returns {void}
      */
     removeEventListener(name: string, callback: Function): void;
     /**
      * Dispatches the given event to all registered listeners on event.name.
-     * @param {Object} event Event to dispatch.
+     * @param {any} event Event to dispatch.
+     * @returns {void}
      */
     dispatchEvent(event: any): void;
     /**
      * Sets up a debug canvas for the AR detection.
      * Draws a red marker on top of each detected square in the image.
      * The debug canvas is added to document.body.
+     * @returns {void}
      */
     debugSetup(): void;
     /**
      * Draw the black and white image and debug markers to the ARController canvas.
      * See setDebugMode.
-     * @return 0 (void)
+     * @return {void}
      */
     debugDraw(): void;
     /**
      * Draw a square black border around the detect marker with
      * red circle in the center. Used for debugging porpouse in debugSetup.
-     * @return {number} 0 (void)
+     * @return {void} (void)
      */
-    drawDebugMarker(marker: any): number;
+    drawDebugMarker(marker: any): void;
     /**
      * Loads a pattern marker from the given URL or data string
      * @param {string} urlOrData - The URL or data of the marker pattern file to load.
+     * @return {Promise<number>}
      */
     loadMarker(urlOrData: string): Promise<number>;
     /**
      * Loads a multimarker from the given URL and calls the onSuccess callback with the UID of the marker.
      * @param {string} urlOrData - The URL of the multimarker pattern file to load.
+     * @returns {Promise<any[]>}
      */
     loadMultiMarker(urlOrData: string): Promise<any[]>;
     /**
      * Loads an NFT marker from the given URL or data string
      * @param {string} urlOrData - The URL prefix or data of the NFT markers to load.
+     * @returns {Promise<number>}
     */
     loadNFTMarker(urlOrData: string): Promise<number>;
     /**
@@ -252,6 +261,7 @@ export default class ARController {
      * m {Float64Array} transMat The 3x4 marker transformation matrix.
      * @param {Float64Array} glMat The 4x4 GL transformation matrix.
      * @param {number} scale The scale for the transform.
+     * @returns {Float64Array} glMat The 4x4 GL transformation matrix.
      */
     transMatToGLMat(transMat: any, glMat: Float64Array, scale: number): Float64Array;
     /**
@@ -261,6 +271,7 @@ export default class ARController {
      * @param {Float64Array} glMatrix The 4x4 marker transformation matrix.
      * @param {Float64Array} [glRhMatrix] The 4x4 GL right hand transformation matrix.
      * @param {number} [scale] The scale for the transform.
+     * @returns {Float64Array} glRhMatrix The 4x4 GL right hand transformation matrix.
      */
     arglCameraViewRHf(glMatrix: Float64Array, glRhMatrix?: Float64Array, scale?: number): Float64Array;
     /**
@@ -322,9 +333,9 @@ export default class ARController {
     getNFTMarker(markerIndex: number): object;
     /**
      * Useful function to get NFT data of the loaded marker (width, height and dpi).
-     * @param {number} id
-     * @param {number} index
-     * @returns {object}
+     * @param {number} id the internal id
+     * @param {number} index the index of the NFT marker
+     * @returns {object} width, height and dpi of the NFT marker
      */
     getNFTData(id: number, index: number): object;
     /**
@@ -333,9 +344,10 @@ export default class ARController {
      * Useful for building custom markers for getTransMatSquare.
      * A markerIndex of -1 is used to access the global custom marker.
      * @param {number} markerIndex The index of the marker to edit.
-     * @param {*} vertexData
+     * @param {any[]} vertexData
+     * @returns {number}
      */
-    setMarkerInfoVertex(markerIndex: number, vertexData: any): any;
+    setMarkerInfoVertex(markerIndex: number, vertexData: any[]): number;
     /**
      * Makes a deep copy of the given marker info.
      * @param {object} markerInfo The marker info object to copy.
@@ -381,8 +393,9 @@ export default class ARController {
      * the binarization process and choosing a threshold value.
      * @param {boolean} mode true to enable debug mode, false to disable debug mode
      * @see getDebugMode()
+     * @returns {number}
      */
-    setDebugMode(mode: boolean): any;
+    setDebugMode(mode: boolean): number;
     /**
      * Returns whether debug mode is currently enabled.
      * @return {boolean} true when debug mode is enabled, false when debug mode is disabled
@@ -397,8 +410,9 @@ export default class ARController {
     /**
      * Sets the logging level to use by ARToolKit.
      * @param {number} mode type for the log level.
+     * @returns {number}
      */
-    setLogLevel(mode: number): any;
+    setLogLevel(mode: number): number;
     /**
      * Gets the logging level used by ARToolKit.
      * @return {number} return the log level in use.
@@ -412,13 +426,13 @@ export default class ARController {
      * This is important to compute the transformation matrix in arGetTransMat().
      * @param {number} markerIndex the index of the marker
      * @param {number} dir direction of the marker (possible values are 0, 1, 2 or 3).
-     * @return {number} 0 (void)
+     * @return {number}
      */
     setMarkerInfoDir(markerIndex: number, dir: number): number;
     /**
      * Sets the value of the near plane of the camera.
      * @param {number} value the value of the near plane
-     * @return {number} 0 (void)
+     * @return {number}
      */
     setProjectionNearPlane(value: number): number;
     /**
@@ -429,7 +443,7 @@ export default class ARController {
     /**
      * Sets the value of the far plane of the camera.
      * @param {number} value the value of the far plane
-     * @return {number} 0 (void)
+     * @return {number}
      */
     setProjectionFarPlane(value: number): number;
     /**
@@ -445,8 +459,9 @@ export default class ARController {
      * AR_LABELING_THRESH_MODE_AUTO_OTSU,
      * AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,
      * AR_LABELING_THRESH_MODE_AUTO_BRACKETING
+     * @returns {number}
      */
-    setThresholdMode(mode: number): any;
+    setThresholdMode(mode: number): number;
     /**
      * Gets the current threshold mode used for image binarization.
      * @return {number} The current threshold mode
@@ -471,8 +486,9 @@ export default class ARController {
      * suitable midpoint between the observed values for black
      * and white portions of the markers in the image.
      * @param {number} threshold An integer in the range [0,255] (inclusive).
+     * @returns {number}
      */
-    setThreshold(threshold: number): any;
+    setThreshold(threshold: number): number;
     /**
      * Get the current labeling threshold.
      * This function queries the current labeling threshold. For,
@@ -496,6 +512,7 @@ export default class ARController {
      * are also available, in which a matrix-detection pass is made first,
      * followed by a template-matching pass.
      * @param {number} mode
+     * @returns {number}
      * Options for this field are:
      * AR_TEMPLATE_MATCHING_COLOR
      * AR_TEMPLATE_MATCHING_MONO
@@ -504,7 +521,7 @@ export default class ARController {
      * AR_TEMPLATE_MATCHING_MONO_AND_MATRIX
      * The default mode is AR_TEMPLATE_MATCHING_COLOR.
      */
-    setPatternDetectionMode(mode: number): any;
+    setPatternDetectionMode(mode: number): number;
     /**
      * Returns the current pattern detection mode.
      * @return {number} The current pattern detection mode.
@@ -517,7 +534,7 @@ export default class ARController {
      * with which the markers were produced can be set via this function.
      * This setting is global to a given ARHandle; It is not possible to have two different matrix
      * code types in use at once.
-     * @param type The type of matrix code (2D barcode) in use. Options include:
+     * @param {any} type The type of matrix code (2D barcode) in use. Options include:
      * AR_MATRIX_CODE_3x3
      * AR_MATRIX_CODE_3x3_HAMMING63
      * AR_MATRIX_CODE_3x3_PARITY65
@@ -529,8 +546,9 @@ export default class ARController {
      * AR_MATRIX_CODE_5x5
      * AR_MATRIX_CODE_6x6
      * The default mode is AR_MATRIX_CODE_3x3.
+     * @returns {number}
      */
-    setMatrixCodeType(type: any): any;
+    setMatrixCodeType(type: any): number;
     /**
      * Returns the current matrix code (2D barcode) marker detection type.
      * @return {number} The current matrix code type.
@@ -549,22 +567,24 @@ export default class ARController {
      * AR_LABELING_WHITE_REGION
      * AR_LABELING_BLACK_REGION
      * The default mode is AR_LABELING_BLACK_REGION.
+     * @returns {number}
      */
-    setLabelingMode(mode: number): any;
+    setLabelingMode(mode: number): number;
     /**
      * Enquire whether detection is looking for black markers or white markers.
      * See discussion for setLabelingMode.
-     * @result {number} The current labeling mode.
+     * @return {number} The current labeling mode.
      */
-    getLabelingMode(): any;
+    getLabelingMode(): number;
     /**
      * Set the width/height of the marker pattern space, as a proportion of marker width/height.
      * @param {number} pattRatio The the width/height of the marker pattern space, as a proportion of marker
      * width/height. To set the default, pass AR_PATT_RATIO.
      * If compatibility with ARToolKit verions 1.0 through 4.4 is required, this value
      * must be 0.5.
+     * @returns {number}
      */
-    setPattRatio(pattRatio: number): any;
+    setPattRatio(pattRatio: number): number;
     /**
      * Returns the current ratio of the marker pattern to the total marker size.
      * @return {number} The current pattern ratio.
@@ -588,8 +608,9 @@ export default class ARController {
      * AR_IMAGE_PROC_FRAME_IMAGE
      * AR_IMAGE_PROC_FIELD_IMAGE
      * The default mode is AR_IMAGE_PROC_FRAME_IMAGE.
+     * @returns {number}
      */
-    setImageProcMode(mode: number): any;
+    setImageProcMode(mode: number): number;
     /**
      * Get the image processing mode.
      * See arSetImageProcMode() for a complete description.
@@ -600,19 +621,22 @@ export default class ARController {
      * This function init the ArController with the necessary parmeters and variables.
      * Don't call directly this but instead instantiate a new ArController.
      * @return {ARController} The initialized ARController instance
+     * @private
      */
-    _initialize(): ARController;
+    private _initialize;
     artoolkit: ARToolkit;
     /**
      * Init the necessary kpm handle for NFT and the settings for the CPU.
-     * @return {number} 0 (void)
+     * @return {number}
+     * @private
      */
-    _initNFT(): number;
+    private _initNFT;
     /**
      * Copy the Image data to the HEAP for the debugSetup function.
-     * @return {number} 0 (void)
+     * @return {number}
+     * @private
      */
-    _copyImageToHeap(sourceImage: any): number;
+    private _copyImageToHeap;
 }
 import ARToolkit from "./ARToolkit";
 //# sourceMappingURL=ARController.d.ts.map
