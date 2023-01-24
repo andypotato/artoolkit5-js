@@ -1,6 +1,6 @@
 {
   "name": "@ar-js-org/artoolkit5-js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "ES6 module port of artoolkit5",
   "main": "dist/ARToolkit.js",
   "types": "types/index.d.ts",
@@ -37,7 +37,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.20.7",
-    "axios": "^1.2.2"
+    "@babel/runtime": "^7.20.13",
+    "axios": "^1.2.4"
   }
 }
