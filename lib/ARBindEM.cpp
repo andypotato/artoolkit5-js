@@ -4,6 +4,8 @@ using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(constant_bindings) {
 
+	register_vector<nftMarker>("nftMarkers");
+
 	function("setup", &setup);
 	function("teardown", &teardown);
 
@@ -35,6 +37,14 @@ EMSCRIPTEN_BINDINGS(constant_bindings) {
 	function("getMultiEachMarker", &getMultiEachMarkerInfo);
 	function("getMarker", &getMarkerInfo);
 	function("getNFTMarker", &getNFTMarkerInfo);
+	function("getNFTData", &getNFTData);
+
+	/* nft marker struct */
+	value_object<nftMarker>("nftMarker")
+	.field("id", &nftMarker::id_NFT)
+	.field("width", &nftMarker::width_NFT)
+	.field("height", &nftMarker::height_NFT)
+	.field("dpi", &nftMarker::dpi_NFT);
 
 
 	/* AR Toolkit C APIS */
@@ -128,6 +138,10 @@ EMSCRIPTEN_BINDINGS(constant_bindings) {
 	constant("AR_MATRIX_CODE_4x4", AR_MATRIX_CODE_4x4 + 0);
 	constant("AR_MATRIX_CODE_4x4_BCH_13_9_3", AR_MATRIX_CODE_4x4_BCH_13_9_3 + 0);
 	constant("AR_MATRIX_CODE_4x4_BCH_13_5_5", AR_MATRIX_CODE_4x4_BCH_13_5_5 + 0);
+	constant("AR_MATRIX_CODE_5x5_BCH_22_12_5", AR_MATRIX_CODE_5x5_BCH_22_12_5 + 0);
+	constant("AR_MATRIX_CODE_5x5_BCH_22_7_7", AR_MATRIX_CODE_5x5_BCH_22_7_7 + 0);
+	constant("AR_MATRIX_CODE_5x5", AR_MATRIX_CODE_5x5 + 0);
+	constant("AR_MATRIX_CODE_6x6", AR_MATRIX_CODE_6x6 + 0);
 
 	constant("AR_LABELING_THRESH_MODE_MANUAL", AR_LABELING_THRESH_MODE_MANUAL + 0);
 	constant("AR_LABELING_THRESH_MODE_AUTO_MEDIAN", AR_LABELING_THRESH_MODE_AUTO_MEDIAN + 0);
