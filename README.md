@@ -1,5 +1,5 @@
 
-# @ar-js-org/artoolkit5-js
+# artoolkit5-js
 
 This is the artoolkit5-js fork for the AR.js project.
 
@@ -9,9 +9,9 @@ This build is uses WASM for best possible performance and is designed to be (mor
 
 ## Installation
 
-The **@ar-js-org/artoolkit5-js** package can be installed via NPM:
+The **artoolkit5-js** package can be installed via NPM:
 ```
-npm install @ar-js-org/artoolkit5-js
+npm install artoolkit5-js
 ```
 The module is built in UMD format and can be used in different environments:
 
